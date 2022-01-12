@@ -73,6 +73,24 @@ def gPeak(h=None,inDir=None,isData=None,lumi=None):
 	 #print(i, '   ', Ereco)
 	 Pseudo_Exp.Fill(Ereco)
    
+## Set the function
+    fitfunc_pseudo = TF1("Gaussian fit", myFitFunc, 64, 67, 3)
+    ## Set normalization
+    fitfunc_pseudo.SetParameter(0, 0.1*Pseudo_Exp.Integral());
+    fitfunc_pseudo.SetParLimits(0, 0.00000000001*Pseudo_Exp.Integral(), 2.5*Pseudo_Exp.Integral());
+    ## Set gaussian mean starting value and limits
+    fitfunc_pseudo.SetParameter(1, 65);
+    fitfunc_pseudo.SetParLimits(1, 64, 67);
+    ## Set gaussian width starting value and limits
+    fitfunc_pseudo.SetParameter(2, 0.6);
+    fitfunc_pseudo.SetParLimits(2, 0.05, 1.5);
+    ## Some cosmetics
+    fitfunc_pseudo.SetLineColor(kBlue)
+    fitfunc_pseudo.SetLineWidth(3)
+    fitfunc_pseudo.SetLineStyle(1)
+
+
+    Pseudo_Exp.Fit("Gaussian fit","EMQ", "", 64, 67)
 
     #Canvas
     c2 = TCanvas("Pseudo_Exp","Pseudo Experiment",800,800)
