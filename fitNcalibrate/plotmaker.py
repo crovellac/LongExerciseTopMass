@@ -41,7 +41,7 @@ def gPeak(h=None,inDir=None,isData=None,lumi=None):
     fitfunc.SetParameter(2, 0.65);
     fitfunc.SetParLimits(2, 0.35, 0.95);
     ## Some cosmetics
-    fitfunc.SetLineColor(kRed)
+    fitfunc.SetLineColor(kBlue)
     fitfunc.SetLineWidth(3)
     fitfunc.SetLineStyle(1)
 
@@ -103,11 +103,7 @@ def plotter(h=None,name=None):
 
 
 def main():
-    fOut=ROOT.TFile.Open("cuizhipeng.root",'RECREATE')
-   # for key in histos: histos[key].Write()
-
     f = TFile("cuizhipeng.root", "recreate")
-    gROOT.SetBatch(True)
     usage = 'usage: %prog [options]'
     parser = optparse.OptionParser(usage)
     parser.add_option('-d', '--isData',  action = 'store_true',   dest='isData')
@@ -149,22 +145,22 @@ def main():
 
     #Generate pseudo-exp
     r3 = TRandom3()
-    r3.SetSeed(34252)
-    Npe = 1500
+    r3.SetSeed(1)
+    Npe = 2000
     #heb = TH1F("heb", "", 50,61,68) # 169v5
-    #heb = TH1F("heb", "", 50,63,68) # 172v5
-    heb = TH1F("heb", "", 50,64,69) # 175v5
+    heb = TH1F("heb", "", 50,63,70) # 172v5
+    #heb = TH1F("heb", "", 50,64,70) # 175v5
 
     #hde = TH1F("hde", "", 30,0.09,0.2) # 169v5
-    #hde = TH1F("hde", "", 30,0,0.1) # 172v5
-    hde = TH1F("hde", "", 30,0.08,0.3) # 175v5
+    hde = TH1F("hde", "", 30,0,0.4) # 172v5
+    #hde = TH1F("hde", "", 30,0.08,0.2) # 175v5
 
-    hpull = TH1F("hpull", "",100,-150,-80)
-    hpullcal = TH1F("hpullcal", "",100,-70,0)
+    hpull = TH1F("hpull", "",100,-100,100)
+    hpullcal = TH1F("hpullcal", "",100,-100,100)
 
     #pred = 65.740 #169v5
-    #pred = 67.57 #172v5
-    pred = 69.39 #175v5
+    pred = 67.57 #172v5
+    #pred = 69.39 #175v5
 
     for i in range(0,Npe):
         hpe = histo.Clone()
@@ -187,19 +183,14 @@ def main():
         #print "Eb:", Eb, "  DEb:", DEb, "  Pull:", pull, "Delta:", abs(Eb-pred)
         pullcal=(Ebcal-pred)/DEbcal
         hpullcal.Fill(pullcal)
-      #  print Eb
-    heb.Write()
-    hde.Write()
-    hpull.Write()
-    hpullcal.Write()
-    plotter(heb,"Eb.pdf")
-    plotter(hde,"Deb.pdf")
-    plotter(hpull,"Pull.pdf")
-    plotter(hpullcal,"Pull_corr.pdf")
+
+ #   plotter(heb,"Eb.pdf")
+ #   plotter(hde,"Deb.pdf")
+ #   plotter(hpull,"Pull.pdf")
+ #   plotter(hpullcal,"Pull_corr.pdf")
 
     res.Close()
-   # f.Write()
-    fOut.Close()
+    f.Write()
 if __name__ == "__main__":
     sys.exit(main())
 
